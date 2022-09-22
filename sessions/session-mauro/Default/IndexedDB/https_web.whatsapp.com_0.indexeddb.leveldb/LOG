@@ -1,0 +1,11 @@
+2022/09/19-15:37:03.159 1a120 Reusing MANIFEST C:\Users\matim\Desktop\trabajo\sef\FINAL  backend- bot\sessions\session-mauro\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2022/09/19-15:37:03.160 1a120 Recovering log #25
+2022/09/19-15:37:05.720 1a120 Reusing old log C:\Users\matim\Desktop\trabajo\sef\FINAL  backend- bot\sessions\session-mauro\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000025.log 
+2022/09/19-15:37:45.188 1a554 Level-0 table #31: started
+2022/09/19-15:37:46.872 1a554 Level-0 table #31: 1190498 bytes OK
+2022/09/19-15:37:47.386 1a554 Delete type=0 #25
+2022/09/19-15:37:47.500 1a554 Compacting 1@1 + 2@2 files
+2022/09/19-15:37:55.209 1a554 Generated table #32@1: 32712 keys, 2258393 bytes
+2022/09/19-15:38:00.195 1a554 Generated table #33@1: 45442 keys, 1980535 bytes
+2022/09/19-15:38:00.195 1a554 Compacted 1@1 + 2@2 files => 4238928 bytes
+2022/09/19-15:38:00.576 1a554 compacted to: files[ 0 0 2 0 0 0 0 ]
