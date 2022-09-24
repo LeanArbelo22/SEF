@@ -1,4 +1,4 @@
-PrivateChat {
+PrivateChat{
     id: {
       server: 'c.us',
       user: '5493516110463',
@@ -149,7 +149,4 @@ PrivateChat {
     isGif: false,
     isEphemeral: false,
     links: []
-  },
-
-  [sdasdasdasd
-as]
+  }
