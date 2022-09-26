@@ -8,7 +8,7 @@ const PASSWORD = encodeURIComponent(config.dbPassword);
 const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
 
 
-const sequelize = new Sequelize(URI,{
+const sequelize = new Sequelize( config.dbUrl,{
     dialect: 'postgres',
     logging:true,
     dialectOptions: {

@@ -389,7 +389,7 @@ const delSession = (id) => {
 
  
 
-// auth('mati');
+auth('mati');
 // auth('elias');
 // auth('mauro');
  
