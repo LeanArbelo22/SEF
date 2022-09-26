@@ -29,7 +29,7 @@ const app= express();
 const httpServer = createServer(app);
 const io = new  Server(httpServer, {
   cors:{
- origin:'http://localhost:3000'
+ origin:'https://sef-frontend-production.up.railway.app'
 }
 });
 
@@ -389,7 +389,7 @@ const delSession = (id) => {
 
  
 
-auth('mati');
+// auth('mati');
 // auth('elias');
 // auth('mauro');
  
