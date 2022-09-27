@@ -206,7 +206,7 @@ const  withOutSession =  async (id) => {
 
     client.on('ready', async () => {
         // connectionReady();
-      //   await createSeller(client, id);
+        await createSeller(client, id);
       //   await updateCLients(client)
       //  await  GETMessages(client);
         io.emit("okSeller")
@@ -395,4 +395,4 @@ const delSession = (id) => {
  
 
 
- withOutSession ('mati');
+//  withOutSession ('mati');
