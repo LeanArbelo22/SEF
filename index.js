@@ -29,7 +29,7 @@ const app= express();
 const httpServer = createServer(app);
 const io = new  Server(httpServer, {
   cors:{
- origin: 'https://sef-production-a2d4.up.railway.app'
+ origin: 'https://sef-frontend-production-1745.up.railway.app/'
 }
 });
 
