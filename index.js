@@ -259,7 +259,7 @@ const  withOutSession =  async (id) => {
   
        })
 
-       io.emit("newMessage")
+        io.emit("newMessage")
   
        })
   
