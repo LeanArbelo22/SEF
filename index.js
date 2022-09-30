@@ -93,6 +93,10 @@ const  withOutSession =  async (id) => {
         console.log('iniciado')
     });
 
+  client.on('disconnected', () => {
+    client.destroy();
+    client.initialize();
+  })
     client.on('message_create', async (msg) =>{
       let clientInfo = client.info;
       let vendedorNumber = clientInfo.wid.user;
@@ -138,7 +142,7 @@ const  withOutSession =  async (id) => {
       io.emit("newMessage")
     })
 
-    return 
+     
 }
 
 /* ********** */
