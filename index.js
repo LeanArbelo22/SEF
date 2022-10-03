@@ -56,7 +56,7 @@ const  withOutSession =  async (id) => {
       const client = new Client({
           restartOnAuthFail: true,
           puppeteer: {
-            
+            timeout: 60000,
             headless: true,
             args: [
               '--no-sandbox',
@@ -69,7 +69,7 @@ const  withOutSession =  async (id) => {
             ],
           },
           //takeoverTimeoutMs: 10,
-          authTimeoutMs: 60000,
+          authTimeoutMs: 60000, //
           authStrategy: new LocalAuth({ clientId: id, dataPath: './sessions'}),
       });
 
