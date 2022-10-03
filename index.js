@@ -53,24 +53,28 @@ io.on("connection", socket => {
 const  withOutSession =  async (id) => {
      
     console.log('No tenemos session guardada');
-   
-    const client = new Client({
-        restartOnAuthFail: true,
-        puppeteer: {
-           
-          headless: true,
-          args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-accelerated-2d-canvas',
-            '--no-first-run',
-            '--no-zygote',
-            '--disable-gpu'
-          ],
-        },
-        authStrategy: new LocalAuth({ clientId: id, dataPath: './sessions'}),
-    });
+    try {
+
+      const client = new Client({
+          restartOnAuthFail: true,
+          puppeteer: {
+            
+            headless: true,
+            args: [
+              '--no-sandbox',
+              '--disable-setuid-sandbox',
+              '--disable-dev-shm-usage',
+              '--disable-accelerated-2d-canvas',
+              '--no-first-run',
+              '--no-zygote',
+              '--disable-gpu'
+            ],
+          },
+          authStrategy: new LocalAuth({ clientId: id, dataPath: './sessions'}),
+      });
+    } catch (e) {
+      console.log(e);
+    }
 
     client.initialize();
     
@@ -81,8 +85,9 @@ const  withOutSession =  async (id) => {
         console.log(qr);
         io.emit("qrNew", qr )
 
-      } catch (error) {
-          console.log(error)
+      } catch (e) {
+          console.log(e)
+          io.emit("qrError", e)
       }
     });
 
@@ -98,6 +103,7 @@ const  withOutSession =  async (id) => {
         console.log(e);
         delSession(id);
         client.destroy();
+        io.emit("sellerError", e)
       }
     });
 
