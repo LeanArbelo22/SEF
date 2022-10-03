@@ -87,12 +87,18 @@ const  withOutSession =  async (id) => {
     });
 
     client.on('ready', async () => {
+      try {
         //connectionReady();
         await createSeller(client, id);
         //await updateCLients(client)
         //await  GETMessages(client);
-          io.emit("okSeller", id)
-          console.log('iniciado')
+        io.emit("okSeller")
+        console.log('iniciado')
+      } catch (e) {
+        console.log(e);
+        delSession(id);
+        client.destroy();
+      }
     });
 
   client.on('disconnected', () => {
