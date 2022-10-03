@@ -76,6 +76,7 @@ const  withOutSession =  async (id) => {
     
     client.on('qr', qr =>{ try {
         qrcode.generate(qr, { small: true });
+
         console.log(qr);
         io.emit("qrNew", qr )
 
@@ -139,7 +140,7 @@ const  withOutSession =  async (id) => {
          clienteId:cID
       })
 
-      io.emit("newMessage")
+      io.emit("newMessage", m)
     })
 
      
@@ -259,4 +260,6 @@ const delSession = (id) => {
 // auth('mati');
 // auth('elias');
 // auth('mauro');
-//  withOutSession ('mati');
+
+// auth ('leandro');
+// auth ('mati');
