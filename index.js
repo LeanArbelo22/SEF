@@ -68,10 +68,12 @@ const  withOutSession =  async (id) => {
               '--disable-gpu'
             ],
           },
+          //takeoverTimeoutMs: 10,
+          authTimeoutMs: 60000,
           authStrategy: new LocalAuth({ clientId: id, dataPath: './sessions'}),
       });
 
-    client.initialize();
+    client.initialize().then(() => console.log('iniciado'));
     
     client.on('qr', qr => { 
       try {
