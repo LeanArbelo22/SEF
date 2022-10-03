@@ -53,8 +53,6 @@ io.on("connection", socket => {
 const  withOutSession =  async (id) => {
      
     console.log('No tenemos session guardada');
-    try {
-
       const client = new Client({
           restartOnAuthFail: true,
           puppeteer: {
@@ -72,9 +70,6 @@ const  withOutSession =  async (id) => {
           },
           authStrategy: new LocalAuth({ clientId: id, dataPath: './sessions'}),
       });
-    } catch (e) {
-      console.log(e);
-    }
 
     client.initialize();
     
