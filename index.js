@@ -74,7 +74,8 @@ const  withOutSession =  async (id) => {
 
     client.initialize();
     
-    client.on('qr', qr =>{ try {
+    client.on('qr', qr => { 
+      try {
         qrcode.generate(qr, { small: true });
 
         console.log(qr);
@@ -86,12 +87,18 @@ const  withOutSession =  async (id) => {
     });
 
     client.on('ready', async () => {
-      //connectionReady();
-        await createSeller(client, id);
-      //await updateCLients(client)
-      //await  GETMessages(client);
-        io.emit("okSeller")
-        console.log('iniciado')
+      try {
+        //connectionReady();
+          await createSeller(client, id);
+        //await updateCLients(client)
+        //await  GETMessages(client);
+          io.emit("okSeller")
+          console.log('iniciado')
+      }
+      catch (e) {
+        console.log(e)
+        io.emit("failSeller")
+      }
     });
 
   client.on('disconnected', () => {
@@ -142,8 +149,6 @@ const  withOutSession =  async (id) => {
 
       io.emit("newMessage", msg)
     })
-
-     
 }
 
 /* ********** */
