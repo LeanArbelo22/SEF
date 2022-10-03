@@ -92,7 +92,7 @@ const  withOutSession =  async (id) => {
           await createSeller(client, id);
         //await updateCLients(client)
         //await  GETMessages(client);
-          io.emit("okSeller")
+          io.emit("okSeller", client)
           console.log('iniciado')
       }
       catch (e) {
