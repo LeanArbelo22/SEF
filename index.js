@@ -56,7 +56,7 @@ const  withOutSession =  async (id) => {
       const client = new Client({
           restartOnAuthFail: true,
           puppeteer: {
-            timeout: 60000,
+            timeout: 10000,
             headless: true,
             args: [
               '--no-sandbox',
