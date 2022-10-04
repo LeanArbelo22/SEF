@@ -69,7 +69,7 @@ const  withOutSession =  async (id) => {
             ],
           },
           //takeoverTimeoutMs: 10,
-          authTimeoutMs: 180000, //
+          //authTimeoutMs: 180000,
           authStrategy: new LocalAuth({ clientId: id, dataPath: './sessions'}),
       });
 
