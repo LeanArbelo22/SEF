@@ -5,7 +5,7 @@ const qrcode = require("qrcode-terminal");
 const qr = require('qr-image');
 const express = require('express');
 const { Client, LocalAuth } = require("whatsapp-web.js");
-const port =  process.env.PORT ;
+const port =  process.env.PORT || 3002;
 const cors = require('cors');
 const {Server} = require('socket.io');
 const {createServer} =  require('http')
@@ -34,7 +34,7 @@ routerApi(app);
 app.use(express.json());
 
 httpServer.listen(port, () => {
-  console.log('port listo')
+  console.log('port listo', port)
 });
 
 /* codigo comentado 2 */
@@ -56,7 +56,7 @@ const  withOutSession =  async (id) => {
       const client = new Client({
           restartOnAuthFail: true,
           puppeteer: {
-            //timeout: 60000,
+
             headless: true,
             args: [
               '--no-sandbox',
@@ -68,8 +68,7 @@ const  withOutSession =  async (id) => {
               '--disable-gpu'
             ],
           },
-          //takeoverTimeoutMs: 10,
-          //authTimeoutMs: 180000,
+          
           authStrategy: new LocalAuth({ clientId: id, dataPath: './sessions'}),
       });
 
