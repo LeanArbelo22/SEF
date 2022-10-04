@@ -89,7 +89,7 @@ const  withOutSession =  async (id) => {
 
     client.on('auth_failure', () => console.log('Fallo en autenticacion'))
     client.on('authenticated', () => console.log('Autenticado'))
-
+    client.on('disconnected', () => console.log('Desconectado'))
     client.on('ready', async () => {
       try {
         //connectionReady();
