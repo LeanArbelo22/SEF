@@ -29,7 +29,7 @@ const app= express();
 const httpServer = createServer(app);
 const io = new  Server(httpServer, {
   cors:{
- origin:'https://sef-frontend-production.up.railway.app'
+ origin: 'https://sef-production.up.railway.app'
 }
 });
 
@@ -260,6 +260,8 @@ client.on('disconnected', ()=>{
          clienteId:cID
   
        })
+
+       // io.emit("newMessage")
   
        })
   
