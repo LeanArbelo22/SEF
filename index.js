@@ -34,7 +34,7 @@ const io = new  Server(httpServer, {
 });
 
 
-app.use(cors());
+// app.use(cors());
 routerApi(app);
 
 app.use(express.json());
