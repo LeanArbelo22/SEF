@@ -5,7 +5,7 @@ const qrcode = require("qrcode-terminal");
 const qr = require('qr-image');
 const express = require('express');
 const { Client, LocalAuth } = require("whatsapp-web.js");
-const port =  process.env.PORT ;
+const port =   4000;
 const cors = require('cors');
 const {Server} = require('socket.io');
 const {createServer} =  require('http')
@@ -203,7 +203,9 @@ const  withOutSession =  async (id) => {
         
         
     });
-
+client.on('disconnected', ()=>{
+  
+})
     client.on('ready', async () => {
         // connectionReady();
         await createSeller(client, id);
@@ -263,7 +265,7 @@ const  withOutSession =  async (id) => {
   
   
 
-    return 
+    
 }
 
 // codigo wemerson

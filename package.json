@@ -20,6 +20,7 @@
     "whatsapp-web.js": "^1.17.1"
   },
   "scripts": {
+    "start":"node index.js",
     "migrations:generate": "sequelize-cli migration:generate --name",
     "migrations:run": "sequelize-cli db:migrate",
     "migrations:revert": "sequelize-cli db:migrate:undo",
