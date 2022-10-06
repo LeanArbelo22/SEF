@@ -86,7 +86,7 @@ const  withOutSession =  async (id) => {
           io.emit("qrError", e)
       }
     });
-
+            /// ADD BOT
     client.on('auth_failure', () => console.log('Fallo en autenticacion'))
     client.on('authenticated', () => console.log('Autenticado'))
     client.on('disconnected', () => console.log('Desconectado'))
