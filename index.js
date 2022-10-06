@@ -1,14 +1,7 @@
-//librerias
-require('dotenv').config()
+// librerias
+require('dotenv').config();
 const fs = require('fs');
 const qrcode = require("qrcode-terminal");
-const qr = require('qr-image');
-const express = require('express');
-const { Client, LocalAuth } = require("whatsapp-web.js");
-const port =  process.env.PORT || 3002;
-const cors = require('cors');
-const {Server} = require('socket.io');
-const {createServer} =  require('http')
 // funciones y variables
 /* codigo comentado 1 */
 const { saveMedia, addChat} = require('./controllers/save');
@@ -17,10 +10,15 @@ const {createSeller} = require('./db/services/seller.services.js');
 const {updateCLients} = require('./db/services/client.services.js');
 const {GETMessages} = require('./db/services/messages.services.js');
 const  routerApi = require('./routes');
-const { Socket } = require('dgram'); // ?
+// const qr = require('qr-image');
+const express = require('express');
+const cors = require('cors');
+const { Client, LocalAuth } = require("whatsapp-web.js");
+const {Server} = require('socket.io');
+const {createServer} =  require('http')
+const PORT =  process.env.PORT || 3002;
 
-
-const app= express();
+const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors:{
@@ -30,29 +28,28 @@ const io = new Server(httpServer, {
 
 app.use(cors());
 routerApi(app);
-
 app.use(express.json());
 
-httpServer.listen(port, () => {
-  console.log('port listo', port)
+httpServer.listen(PORT, () => {
+  console.log('Port listo:', PORT)
 });
 
 /* codigo comentado 2 */
 
 io.on("connection", socket => {
-  console.log("conectado");
+  console.log("Socket conectado");
 
   socket.on("newSeller", (newSellerName) => {
-    console.log(newSellerName);
-    withOutSession(newSellerName);
+    console.log("New seller:", newSellerName);
+    withOutSession(newSellerName); // !!
   })
 })
 
 /* codigo comentado 3 */
 
-const  withOutSession =  async (id) => {
-     
+const withOutSession = (sellerName) => { // ?? async sin await     
     console.log('No tenemos session guardada');
+
       const client = new Client({
           restartOnAuthFail: true,
           puppeteer: {
@@ -67,81 +64,82 @@ const  withOutSession =  async (id) => {
               '--no-zygote',
               '--disable-gpu'
             ],
-          },
-          
-          authStrategy: new LocalAuth({ clientId: id, dataPath: './sessions'}),
+          }, // * timeout
+          authStrategy: new LocalAuth({ clientId: sellerName, dataPath: './sessions'}),
       });
 
-    client.initialize().then(() => console.log('iniciado'));
+    client.initialize().then(() => console.log('Sesion iniciada'));
     
     client.on('qr', qr => { 
       try {
         qrcode.generate(qr, { small: true });
-
         console.log(qr);
-        io.emit("qrNew", qr )
-
+        io.emit("qrNew", qr);
       } catch (e) {
-          console.log(e)
-          io.emit("qrError", e)
+          console.log(e);
+          io.emit("qrError", e);
       }
     });
-            /// ADD BOT
-    client.on('auth_failure', () => console.log('Fallo en autenticacion'))
-    client.on('authenticated', () => console.log('Autenticado'))
-    client.on('disconnected', () => console.log('Desconectado'))
+
+    client.on('authenticated', () => console.log('Vendedor autenticado')).catch((e) => { console.error(e) });
+
+    // ?? estos nunca pasan    
+    // client.on('auth_failure', () => console.log('Fallo en autenticacion'))
+    // client.on('disconnected', () => console.log('Desconectado'))
+
     client.on('ready', async () => {
       try {
-        //connectionReady();
+        // connectionReady();
         await createSeller(client, id);
-        //await updateCLients(client)
-        //await  GETMessages(client);
-        io.emit("okSeller")
-        console.log('iniciado')
+        // await updateCLients(client)
+        // await GETMessages(client);
+        io.emit("okSeller");
+        console.log('Sesion lista para usarse');
       } catch (e) {
-        console.log(e);
-        delSession(id);
-        client.destroy();
-        io.emit("sellerError", e)
-      }
+          console.log(e);
+          io.emit("sellerError", e);
+          delSession(id);
+          client.destroy();
+        }
     });
 
-  client.on('disconnected', () => {
-    client.destroy();
-    client.initialize();
-  })
-    client.on('message_create', async (msg) =>{
+    client.on('disconnected', () => {
+      console.log('Desconectado, intentando reiniciar sesion');
+      client.destroy();
+      client.initialize();
+    })
+    
+    client.on('message_create', async (msg) => {
       let clientInfo = client.info;
-      let vendedorNumber = clientInfo.wid.user;
+      let sellerNum = clientInfo.wid.user;
   
-      let chat =  await msg.getChat();
-      let add = await addChat(chat, vendedorNumber );
+      let chat = await msg.getChat();
+      let add = await addChat(chat, sellerNum); // ?? let add
   
       var clienteNumberN = '';
       let body =  msg.body;
       let to = msg.to;
       let from = msg.from;
       let date1 = msg.timestamp;
-      let date =   date1*1000;
+      let date =   date1 * 1000;
       let fromMe =  msg.fromMe;
       let idv =  msg.id.id;
 
       //  Este bug evitar que se publiquen estados
       if (from === 'status@broadcast' || to === 'status@broadcast') {
-        console.log('estado')
-        return
+        console.log('Estado de Whatsapp');
+        return;
       }
-  
-      if(fromMe==true){
-         clienteNumberN =  msg.to; 
+
+      if (fromMe == true) {
+         clienteNumberN = msg.to; 
       } else {
-         clienteNumberN =  msg.from;
+         clienteNumberN = msg.from;
       };
   
-      let cID=   clienteNumberN+'_'+vendedorNumber;
-      let idN = idv +' by '+ cID;
-  
-  
+      let cID = clienteNumberN + '_' + sellerNum;
+      let idN = idv + ' by ' + cID;
+
       let m =  models.Mensaje.create({ 
          body:body,
          to:to,
@@ -150,7 +148,7 @@ const  withOutSession =  async (id) => {
          fromMe:fromMe,
          id:idN,
          clienteId:cID
-      })
+      });
 
       io.emit("newMessage", msg)
     })
@@ -158,118 +156,103 @@ const  withOutSession =  async (id) => {
 
 /* ********** */
 // codigo wemerson
-async function auth(myCustomId){
+const auth = async (myCustomId) => {
     const authStrategy = new LocalAuth({
         clientId: myCustomId,
-         dataPath: './sessions' 
-    })
+        dataPath: './sessions' 
+    });
 
+    const worker = `${__dirname}/sessions/session-${myCustomId}/Default/Service Worker`;
 
-const worker = `${__dirname}/sessions/session-${myCustomId}/Default/Service Worker`
-if (fs.existsSync(worker)) {
-   fs.rmdirSync(worker, { recursive: true })
-}
+    if (fs.existsSync(worker)) {
+      fs.rmdirSync(worker, { recursive: true });
+    }
 
-const client = new Client({
-    restartOnAuthFail: true,
-    puppeteer: { 
-       
-        headless: true,
-        args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-          '--disable-accelerated-2d-canvas',
-          '--no-first-run',
-          '--no-zygote',
-          '--disable-gpu'
-        ],
-      },
-   takeoverOnConflict: true,
-   takeoverTimeoutMs: 10,
-    authStrategy,
- })
+    const client = new Client({
+        restartOnAuthFail: true,
+        puppeteer: { 
+            headless: true,
+            args: [
+              '--no-sandbox',
+              '--disable-setuid-sandbox',
+              '--disable-dev-shm-usage',
+              '--disable-accelerated-2d-canvas',
+              '--no-first-run',
+              '--no-zygote',
+              '--disable-gpu'
+            ],
+        },
+      takeoverOnConflict: true,
+      takeoverTimeoutMs: 10,
+      authStrategy
+    });
 
-client.initialize()
-   .then(async () => {
-      
-      console.log(`WHATSAPP WEB initialize`)
-   })
-   .catch((err) => {
-      console.error(err)   
-   })
+    client.initialize().then(() => { console.log('Sesion iniciada') }).catch((e) => { console.error(e) });
 
+    client.on('message_create', async (msg) => {
+      let clientInfo = client.info;
+      let vendedorNumber = clientInfo.wid.user;
 
+      let chat = await msg.getChat();
+      let add = await addChat(chat, vendedorNumber);
 
-   client.on('message_create', async (msg) =>{
+      var clienteNumberN = '';
+      let body = msg.body;
+      let to = msg.to;
+      let from = msg.from;
+      let date1 = msg.timestamp;
+      let date = date1 * 1000;
+      let fromMe = msg.fromMe;
+      let idv = msg.id.id;
 
+      // Este bug evitar que se publiquen estados
+      if (from === 'status@broadcast' || to === 'status@broadcast') {
+        console.log('Estado de Whatsapp');
+        return;
+      }
 
-    
-    
-    let clientInfo =  client.info;
-       let vendedorNumber =     clientInfo.wid.user;
+      if (fromMe == true) {
+        clienteNumberN = msg.to; 
+      } else{
+        clienteNumberN = msg.from;
+      };
 
-     let chat =  await msg.getChat();
-    let add = await addChat(chat, vendedorNumber );
+      let cID = clienteNumberN + '_' + vendedorNumber;
+      let idN = idv + ' by ' + cID;
 
-     var clienteNumberN = '';
-    let body =  msg.body;
-    let to = msg.to;
-    let from = msg.from;
-    let date1 = msg.timestamp;
-   let date =   date1*1000;
-    let fromMe =  msg.fromMe;
-    let idv =  msg.id.id;
+      let m =  models.Mensaje.create({ 
+        body:body,
+        to:to,
+        from:from,
+        date:date,
+        fromMe:fromMe,
+        id:idN,
+        clienteId:cID
+      });
 
-   //  Este bug evitar que se publiquen estados
-   if (from === 'status@broadcast' || to === 'status@broadcast') {
-    return
-}
+      io.emit("newMessage", msg);
+    });
 
-
-    if(fromMe==true){
-       clienteNumberN =  msg.to; 
-   }
-   else{
-       clienteNumberN =  msg.from;
-   };
-
-   let cID=   clienteNumberN+'_'+vendedorNumber;
-   let idN = idv +' by '+ cID;
-
-
-     let m =  models.Mensaje.create({ 
-       body:body,
-       to:to,
-       from:from,
-       date:date,
-       fromMe:fromMe,
-       id:idN,
-       clienteId:cID
-
-     })
-
-     })
-
-   client.on('ready', async () => {
-    // connectionReady();
-    await createSeller(client, myCustomId);
-    // await updateCLients(client)
-    // await  GETMessages(client);
-    console.log('finalizado');
-  });
+    client.on('ready', async () => {
+      try {
+        // connectionReady();
+        await createSeller(client, myCustomId);
+        // await updateCLients(client)
+        // await GETMessages(client);
+        io.emit("okSeller");
+        console.log('Sesion lista para usarse');
+      } catch (e) {
+          console.log(e);
+          io.emit("sellerError", e);
+          delSession(id);
+          client.destroy();
+        }
+    });
 }
 
 const delSession = (id) => {
-  const delSeller = `${__dirname}/sessions/session-${id}`
-  if (fs.existsSync(delSeller)) {
-    fs.rmdirSync(delSeller, { recursive: true })
+  const sessionDir = `${__dirname}/sessions/session-${id}`;
+  if (fs.existsSync(sessionDir)) {
+    fs.rmdirSync(sessionDir, { recursive: true })
   }
 }
-
-// auth('mati');
-// auth('elias');
-// auth('mauro');
-
-// auth ('leandro');
-// auth ('mati');

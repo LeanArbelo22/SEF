@@ -3,4 +3,4 @@ const connectionReady = (cb = () =>{}) => {
     console.log('Client is ready!');
     cb()
 }
-module.exports = {connectionReady, }
+module.exports = {connectionReady}

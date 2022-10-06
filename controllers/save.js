@@ -1,10 +1,12 @@
-const mimeDb = require('mime-db')
-const fs = require('fs')
-const {models} = require('./../libs/sequelize')
-/**
+const mimeDb = require('mime-db');
+const fs = require('fs');
+const {models} = require('./../libs/sequelize');
+
+// *******************************************************
+/*
  * Guardamos archivos multimedia que nuestro cliente nos envie!
  * @param {*} media 
- */
+*/
 const saveMedia = (media) => {
     const extensionProcess = mimeDb[media.mimetype]
     const ext = extensionProcess.extensions[0]
@@ -12,38 +14,32 @@ const saveMedia = (media) => {
         console.log('** Archivo Media Guardado **');
     });
 }
+// *******************************************************
 
-const addChat = async (chat, vendedorNumber) => {
-   
+const addChat = async (chat, sellerNum) => {
+       let clientNum = chat.id._serialized;
+       let newNumber = chat.id.user;
+       let newName = chat.name;
+       let clientID =  clientNum + '_' + sellerNum;
+
+      //  Este bug evitar que se publiquen estados
+      if (clientNum === 'status@broadcast' || newNumber === 'status@broadcast') { 
+          console.log('Estado de Whatsapp');
+          return;
+      }
       
-       let numberC =  chat.id._serialized;
-       let numberNew  =  chat.id.user;
-       let nameNew  =  chat.name;
-
-       let cID =  numberC+'_'+vendedorNumber;
-
-       //  Este bug evitar que se publiquen estados
-   if (numberC === 'status@broadcast' || numberNew === 'status@broadcast') {
-    console.log('estado');
-
-    return
-}
-
+      // ?? Cliente, created 
       let [Cliente, created] = await models.Cliente.findOrCreate({
-        where: { id: cID  },
+        where: { id: clientID  },
         defaults: {
-          id: cID,
-          number: numberNew,
-          name: nameNew,
-          vendedorNumber: vendedorNumber
+          id: clientID,
+          number: newNumber,
+          name: newName,
+          vendedorNumber: sellerNum
         }
       });
-return
+      
+      return
 }
-
-
-
-
-
 
 module.exports = {saveMedia, addChat}

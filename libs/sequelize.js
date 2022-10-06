@@ -12,9 +12,9 @@ const sequelize = new Sequelize( config.dbUrl,{
     dialect: 'postgres',
     logging:true,
     dialectOptions: {
-        useUTC: false, // for reading from database
+        useUTC: false, // ?? for reading from database
       },
-      timezone: '+03:00', // for writing to database
+      timezone: '+03:00', // !! for writing to database
     
 
 });

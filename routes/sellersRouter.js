@@ -1,46 +1,40 @@
 const express = require('express');
-const { Module } = require('module');
-const {models} = require('./../libs/sequelize');
+const { models } = require('./../libs/sequelize');
 
 const router = express.Router();
 
-
-
-router.get('/', async (req,res) =>{
+router.get('/', async (req, res) => {
+  try {
     const vendedores = await models.Vendedor.findAll();
+    res.status(200).json(vendedores);
+  } catch (e) {
+    console.log(e);
+  }
+})
 
-    res.json(
-    vendedores
-    )
-//   )
-  })
-  
-  
-  
-  
-  router.get('/:numberS/clientes', async (req,res) =>{
-    const {numberS} = req.params;
+router.get('/:sellerNum/clientes', async (req, res) => {
+  try {
+    const { sellerNum } = req.params;
     const clientes = await models.Cliente.findAll({
-      where: {
-        vendedorNumber: numberS
-      }
+      where: { vendedorNumber: sellerNum }
     });
-    res.json(clientes)
-    })
-  
-  
-  
-    router.get('/:numberC/mensajes', async (req,res) =>{
-      const {numberC} = req.params;
-      const mensajes = await models.Mensaje.findAll({
-        where: {
-          clienteId: numberC
-        },
-        order: [
-          ['date', 'ASC']
-      ]
-      });
-      res.json(mensajes)
-      })
-        
+    res.status(200).json(clientes);
+  } catch (e) {
+    console.log(e);
+  }
+})
+
+router.get('/:clientNum/mensajes', async (req, res) => {
+  try {
+    const { clientNum } = req.params;
+    const mensajes = await models.Mensaje.findAll({
+      where: { clienteId: clientNum },
+      order: [ ['date', 'ASC'] ]
+    });
+    res.status(200).json(mensajes);
+  } catch (e) {
+    console.log(e);
+  }
+})
+
 module.exports = router;
