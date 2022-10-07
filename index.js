@@ -66,7 +66,7 @@ const withOutSession = (sellerName) => { // ?? async sin await
             ],
           }, // * timeout
           authStrategy: new LocalAuth({ clientId: sellerName, dataPath: './sessions'}),
-      });
+      }).then(cli => console.log(cli)).catch(err => console.log(err));
 
     client.initialize().then(() => console.log('Sesion iniciada')).catch((e) => { console.error(e) });;
     
