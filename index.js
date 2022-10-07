@@ -68,7 +68,7 @@ const withOutSession = (sellerName) => { // ?? async sin await
           authStrategy: new LocalAuth({ clientId: sellerName, dataPath: './sessions'}),
       });
 
-    client.initialize().then(() => console.log('Sesion iniciada'));
+    client.initialize().then(() => console.log('Sesion iniciada')).catch((e) => { console.error(e) });;
     
     client.on('qr', qr => { 
       try {
@@ -81,7 +81,7 @@ const withOutSession = (sellerName) => { // ?? async sin await
       }
     });
 
-    client.on('authenticated', () => console.log('Vendedor autenticado')).catch((e) => { console.error(e) });
+    client.on('authenticated', () => console.log('Vendedor autenticado'));
 
     // ?? estos nunca pasan    
     // client.on('auth_failure', () => console.log('Fallo en autenticacion'))
