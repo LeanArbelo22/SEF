@@ -49,7 +49,9 @@ io.on("connection", socket => {
 
 const withOutSession = (sellerName) => { // ?? async sin await     
     console.log('No tenemos session guardada');
+    try {
 
+    
       const client = new Client({
           restartOnAuthFail: true,
           puppeteer: {
@@ -66,7 +68,7 @@ const withOutSession = (sellerName) => { // ?? async sin await
             ],
           }, // * timeout
           authStrategy: new LocalAuth({ clientId: sellerName, dataPath: './sessions'}),
-      }).then(cli => console.log(cli)).catch(err => console.log(err));
+      })
 
     client.initialize().then(() => console.log('Sesion iniciada')).catch((e) => { console.error(e) });;
     
@@ -152,6 +154,10 @@ const withOutSession = (sellerName) => { // ?? async sin await
 
       io.emit("newMessage", msg)
     })
+
+    } catch (e) {
+      console.log(e)
+    }
 }
 
 /* ********** */
