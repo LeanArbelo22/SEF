@@ -87,7 +87,7 @@ const withOutSession = (sellerName) => { // ?? async sin await
     // client.on('auth_failure', () => console.log('Fallo en autenticacion'))
     // client.on('disconnected', () => console.log('Desconectado'))
 
-    client.on('ready', async () => {
+    client.on('ready', async (id) => {
       try {
         // connectionReady();
         await createSeller(client, id);
