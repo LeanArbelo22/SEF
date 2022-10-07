@@ -98,7 +98,7 @@ const withOutSession = (sellerName) => { // ?? async sin await
       } catch (e) {
           console.log(e);
           io.emit("sellerError", e);
-          delSession(id);
+          // delSession(id);
           client.destroy();
         }
     });
