@@ -87,10 +87,10 @@ const withOutSession = (sellerName) => { // ?? async sin await
     // client.on('auth_failure', () => console.log('Fallo en autenticacion'))
     // client.on('disconnected', () => console.log('Desconectado'))
 
-    client.on('ready', async (id) => {
+    client.on('ready', async () => {
       try {
         // connectionReady();
-        await createSeller(client, id);
+        await createSeller(client, sellerName);
         // await updateCLients(client)
         // await GETMessages(client);
         io.emit("okSeller");
@@ -98,7 +98,7 @@ const withOutSession = (sellerName) => { // ?? async sin await
       } catch (e) {
           console.log(e);
           io.emit("sellerError", e);
-          // delSession(id);
+          delSession(sellerName);
           client.destroy();
         }
     });
