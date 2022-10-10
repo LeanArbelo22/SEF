@@ -41,8 +41,11 @@ io.on("connection", socket => {
 
     socket.on("newSeller", (newSellerName) => {
         console.log("Evento de socket - newSeller:", newSellerName);
-        const actualSellers = getSellersNames();
-        if (!actualSellers.includes(newSellerName)) {
+
+        const sellersArray = [];
+        getSellersNames().then(data => sellersArray.push(data));
+        
+        if (!sellersArray.includes(newSellerName)) {
             const newSession = newSeller(newSellerName);
             generateSession(newSession, newSellerName, 'NUEVO');
         } else {
