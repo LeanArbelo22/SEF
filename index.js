@@ -44,15 +44,15 @@ io.on("connection", socket => {
 
         const sellersArray = [];
         await getSellersNames().then(data => sellersArray.push(data));
-
-        setTimeout(() => {
-            if (sellersArray.includes(newSellerName)) {
+        let regex = new RegExp(newSellerName, 'ig')
+        
+            if (sellersArray.includes(regex)) {
                 authorizeSeller(newSellerName);
             } else {
                 const newSession = newSeller(newSellerName);
                 generateSession(newSession, newSellerName, 'NUEVO');
             }
-        }, 1500);
+        
     })
 });
 
