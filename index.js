@@ -29,12 +29,19 @@ httpServer.listen(PORT, () => {
     console.log('Port listo:', PORT)
 });
 
+
+const getSellersNames = async () => {
+    const sellersList = await models.Vendedor.findAll({});
+    const sellers = sellers.map(seller => seller.dataValues.name);
+    return sellers
+}
+
 io.on("connection", socket => {
     console.log("Socket conectado");
 
     socket.on("newSeller", (newSellerName) => {
         console.log("Evento de socket - newSeller:", newSellerName);
-        const actualSellers = getSellers();
+        const actualSellers = getSellersNames();
         if (!actualSellers.includes(newSellerName)) {
             const newSession = newSeller(newSellerName);
             generateSession(newSession, newSellerName, 'NUEVO');
@@ -43,12 +50,6 @@ io.on("connection", socket => {
         }
     })
 });
-
-
-const getSellers = async () => {
-    const sellers = await models.Vendedor.find();
-    return [sellers];
-}
 
 const newSeller = (sellerName) => {
     try {
