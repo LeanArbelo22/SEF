@@ -117,8 +117,8 @@ const generateSession = (seller, sellerName, from) => {
             let body = msg.body;
             let to = msg.to;
             let from = msg.from;
-            let date = date1 * 1000;
             let date1 = msg.timestamp;
+            let date = date1 * 1000;
             let fromSeller = msg.fromMe;
             let whatsappMsgID = msg.id.id; // ?
 
@@ -136,7 +136,7 @@ const generateSession = (seller, sellerName, from) => {
             let clientID = whatsappNumber + '_' + sellerNum; // ?
             let messageID = whatsappMsgID + ' by ' + clientID; // ?
 
-            await models.Mensaje.create({   // ? let message 
+            let message = await models.Mensaje.create({   // ? let message 
                 body: body,
                 to: to,
                 from: from,
