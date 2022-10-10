@@ -39,12 +39,14 @@ const getSellersNames = async () => {
 io.on("connection", socket => {
     console.log("Socket conectado");
 
-    socket.on("newSeller", (newSellerName) => {
+    socket.on("newSeller", async (newSellerName) => {
         console.log("Evento de socket - newSeller:", newSellerName);
 
         const sellersArray = [];
-        getSellersNames().then(data => sellersArray.push(data));
-        
+        await getSellersNames().then(data => sellersArray.push(data));
+
+        setTimeout(() => console.log(sellersArray), 1000);
+
         if (!sellersArray.includes(newSellerName)) {
             const newSession = newSeller(newSellerName);
             generateSession(newSession, newSellerName, 'NUEVO');
