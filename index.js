@@ -45,14 +45,14 @@ io.on("connection", socket => {
         const sellersArray = [];
         await getSellersNames().then(data => sellersArray.push(data));
 
-        setTimeout(() => console.log(sellersArray), 1000);
-
-        if (!sellersArray.includes(newSellerName)) {
-            const newSession = newSeller(newSellerName);
-            generateSession(newSession, newSellerName, 'NUEVO');
-        } else {
-            authorizeSeller(newSellerName);
-        }
+        setTimeout(() => {
+            if (!sellersArray.includes(newSellerName)) {
+                const newSession = newSeller(newSellerName);
+                generateSession(newSession, newSellerName, 'NUEVO');
+            } else {
+                authorizeSeller(newSellerName);
+            }
+        }, 1000);
     })
 });
 
