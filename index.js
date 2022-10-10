@@ -32,7 +32,7 @@ httpServer.listen(PORT, () => {
 
 const getSellersNames = async () => {
     const sellersList = await models.Vendedor.findAll({});
-    const sellers = sellers.map(seller => seller.dataValues.name);
+    const sellers = sellersList.map(seller => seller.dataValues.name);
     return sellers
 }
 
