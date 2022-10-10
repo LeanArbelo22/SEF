@@ -46,13 +46,13 @@ io.on("connection", socket => {
         await getSellersNames().then(data => sellersArray.push(data));
 
         setTimeout(() => {
-            if (!sellersArray.includes(newSellerName)) {
+            if (sellersArray.includes(newSellerName)) {
+                authorizeSeller(newSellerName);
+            } else {
                 const newSession = newSeller(newSellerName);
                 generateSession(newSession, newSellerName, 'NUEVO');
-            } else {
-                authorizeSeller(newSellerName);
             }
-        }, 1000);
+        }, 1500);
     })
 });
 
