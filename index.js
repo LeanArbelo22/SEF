@@ -84,14 +84,16 @@ const generateSession = (seller, sellerName, from) => {
         }
     });
 
-    seller.on('authenticated', () => console.log('QR autenticado'));
+    seller.on('authenticated', () => {
+        console.log('QR autenticado');
+        io.emit("okSeller");
+    });
 
     seller.on('auth_failure', () => console.log('Fallo en autenticacion'));
 
     seller.on('ready', async () => {
         try {
             await createSeller(seller, sellerName);
-            io.emit("okSeller");
             console.log('Sesion de vendedor creada correctamente');
         } catch (e) {
             seller.destroy();
@@ -100,9 +102,10 @@ const generateSession = (seller, sellerName, from) => {
     });
 
     seller.on('disconnected', () => {
-        console.log('Desconectado, se borrara e intentara reiniciar la sesion');
+        console.log('Desconectado, se borrara la sesion');
         seller.destroy();
-        seller.initialize();
+        // seller.initialize();
+        io.emit("sellerDisconnected", sellerName);
     });
 
     seller.on('message_create', async (msg) => {
