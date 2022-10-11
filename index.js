@@ -132,8 +132,9 @@ const generateSession = (seller, sellerName) => {
             let fromSeller = msg.fromMe;
             let whatsappMsgID = msg.id.id; // ?
 
-            // probando saveMedia
+            // saveMedia GUARDA en la BD fotos, stickers y videos, AUDIOS NO
             if (msg.hasMedia) {
+                console.log(msg);
                 const mediaMsg = await msg.downloadMedia();
                 saveMedia(mediaMsg);
             }
