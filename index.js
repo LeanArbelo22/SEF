@@ -133,9 +133,10 @@ const generateSession = (seller, sellerName) => {
             let whatsappMsgID = msg.id.id; // ?
 
             // probando saveMedia
-            let isMedia = msg.hasMedia;
-
-            if (isMedia) saveMedia(msg);
+            if (msg.hasMedia) {
+                const mediaMsg = await msg.downloadMedia();
+                saveMedia(mediaMsg);
+            }
         
 
             if (from === 'status@broadcast' || to === 'status@broadcast') {
