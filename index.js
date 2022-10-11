@@ -36,15 +36,16 @@ io.on("connection", socket => {
         console.log("Evento de socket - newSeller:", newSellerName);
 
         const session = newSession(newSellerName);
-        generateSession(session, newSellerName, 'NUEVO');
+        generateSession(session, newSellerName);
     })
 });
 
 const newSession = (sellerName) => {
-    const worker = `${__dirname}/sessions/session-${sellerSession}/Default/Service Worker`;
+    const worker = `${__dirname}/sessions/session-${sellerName}/Default/Service Worker`;
 
     if (fs.existsSync(worker)) {
         fs.rmdirSync(worker, { recursive: true });
+        console.log('Carpeta eliminada');
     }
 
     try {
@@ -75,9 +76,9 @@ const newSession = (sellerName) => {
     }
 }
 
-const generateSession = (seller, sellerName, from) => {
+const generateSession = (seller, sellerName) => {
     seller.initialize()
-        .then(() => console.log('Sesion iniciada:', from))
+        .then(() => console.log('Sesion iniciada'))
         .catch((e) => console.error(e));
 
     seller.on('qr', qr => {
@@ -86,7 +87,7 @@ const generateSession = (seller, sellerName, from) => {
             io.emit("qrNew", qr);
         } catch (e) {
             console.log(e);
-            io.emit("qrError", e);
+            // io.emit("qrError", e);
         }
     });
 
@@ -163,10 +164,9 @@ const generateSession = (seller, sellerName, from) => {
     });
 }
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-const getSellersNames = async () => {
+/* const getSellersNames = async () => {
     const sellersList = await models.Vendedor.findAll({});
     const sellers = sellersList.map(seller => seller.dataValues.name);
     return sellers
-}
+} */
