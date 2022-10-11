@@ -134,9 +134,11 @@ const generateSession = (seller, sellerName) => {
 
             // saveMedia GUARDA en la BD fotos, stickers y videos, AUDIOS NO
             if (msg.hasMedia) {
-                console.log(msg);
+                //console.log(msg);
                 const mediaMsg = await msg.downloadMedia();
+                console.log(mediaMsg);
                 saveMedia(mediaMsg);
+                //return msg = mediaMsg;
             }
         
 
