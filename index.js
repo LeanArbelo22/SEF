@@ -104,7 +104,7 @@ const generateSession = (seller, sellerName, from) => {
     seller.on('disconnected', () => {
         console.log('Desconectado, se borrara la sesion');
         seller.destroy();
-        // seller.initialize();
+        // seller.initialize()
         io.emit("sellerDisconnected", sellerName);
     });
 
