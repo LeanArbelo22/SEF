@@ -1,7 +1,7 @@
 require('dotenv').config();
 const fs = require('fs');
 const qrcode = require("qrcode-terminal");
-const { addChat } = require('./controllers/save');
+const { addChat, saveMedia } = require('./controllers/save');
 const { models } = require('./libs/sequelize');
 const { createSeller } = require('./db/services/seller.services.js');
 const routerApi = require('./routes');
@@ -132,10 +132,16 @@ const generateSession = (seller, sellerName) => {
             let fromSeller = msg.fromMe;
             let whatsappMsgID = msg.id.id; // ?
 
+            // probando saveMedia
+            let isMedia = msg.hasMedia;
+
+            if (isMedia) saveMedia(msg);
+        
+
             if (from === 'status@broadcast' || to === 'status@broadcast') {
                 console.log('Estado de Whatsapp');
                 return;
-            }
+        }
 
             if (fromSeller) {
                 whatsappNumber = msg.to;
@@ -163,7 +169,6 @@ const generateSession = (seller, sellerName) => {
         }
     });
 }
-
 
 /* const getSellersNames = async () => {
     const sellersList = await models.Vendedor.findAll({});
