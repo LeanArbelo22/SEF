@@ -41,6 +41,12 @@ io.on("connection", socket => {
 });
 
 const newSession = (sellerName) => {
+    const worker = `${__dirname}/sessions/session-${sellerSession}/Default/Service Worker`;
+
+    if (fs.existsSync(worker)) {
+        fs.rmdirSync(worker, { recursive: true });
+    }
+
     try {
         const client = new Client({
             restartOnAuthFail: true,
@@ -158,23 +164,6 @@ const generateSession = (seller, sellerName, from) => {
 }
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-const authorizeSeller = async (sellerSession) => {
-    const worker = `${__dirname}/sessions/session-${sellerSession}/Default/Service Worker`;
-
-    if (fs.existsSync(worker)) {
-        fs.rmdirSync(worker, { recursive: true });
-    }
-
-    try {
-        const existentSeller = newSession(sellerSession);
-        generateSession(existentSeller, sellerSession, 'EXISTENTE');
-
-    } catch (e) {
-        console.log(e);
-    }
-}
-
 
 const getSellersNames = async () => {
     const sellersList = await models.Vendedor.findAll({});
