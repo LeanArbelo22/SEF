@@ -132,19 +132,6 @@ const generateSession = (seller, sellerName) => {
             let fromSeller = msg.fromMe;
             let whatsappMsgID = msg.id.id; // ?
 
-            // saveMedia GUARDA fotos, stickers y videos en base64, AUDIOS NO
-            if (msg.hasMedia) {
-                const mediaMsg = await msg.downloadMedia();
-                console.log("--------------------- FULL MESSAGE ---------------------")
-                console.log(msg);
-                console.log("--------------------- MEDIA MESSAGE DOWNLOADED ---------------------");
-                console.log(mediaMsg);
-                
-                // saveMedia(mediaMsg);
-                io.emit("media", mediaMsg);
-            }
-        
-
             if (from === 'status@broadcast' || to === 'status@broadcast') {
                 console.log('Estado de Whatsapp');
                 return;
@@ -168,6 +155,30 @@ const generateSession = (seller, sellerName) => {
                 id: messageID,
                 clienteId: clientID
             });
+
+            // saveMedia GUARDA fotos, stickers y videos en base64, AUDIOS NO
+            if (msg.hasMedia) {
+                const mediaMsg = await msg.downloadMedia();
+                console.log("--------------------- FULL MESSAGE ---------------------")
+                console.log(msg);
+                console.log("--------------------- MEDIA MESSAGE DOWNLOADED ---------------------");
+                console.log(mediaMsg);
+
+                /* let message = await models.Mensaje.create({   // ? let message 
+                    body: body,
+                    to: to,
+                    from: from,
+                    date: date,
+                    fromMe: fromSeller,
+                    id: messageID,
+                    clienteId: clientID,
+                    media: mediaMsg.data,
+                    type: msg.type
+                }); */
+
+                // saveMedia(mediaMsg);
+                io.emit("media", mediaMsg);
+            }
 
             io.emit("newMessage", msg)
 
