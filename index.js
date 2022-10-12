@@ -135,6 +135,11 @@ const generateSession = (seller, sellerName) => {
             // saveMedia GUARDA fotos, stickers y videos en base64, AUDIOS NO
             if (msg.hasMedia) {
                 const mediaMsg = await msg.downloadMedia();
+                console.log("--------------------- FULL MESSAGE ---------------------")
+                console.log(msg);
+                console.log("--------------------- MEDIA MESSAGE DOWNLOADED ---------------------");
+                console.log(mediaMsg);
+                
                 // saveMedia(mediaMsg);
                 io.emit("media", mediaMsg);
             }
@@ -143,7 +148,7 @@ const generateSession = (seller, sellerName) => {
             if (from === 'status@broadcast' || to === 'status@broadcast') {
                 console.log('Estado de Whatsapp');
                 return;
-        }
+            }
 
             if (fromSeller) {
                 whatsappNumber = msg.to;
