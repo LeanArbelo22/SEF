@@ -29,7 +29,7 @@ router.get('/:clientNum/mensajes', async (req, res) => {
     const { clientNum } = req.params;
     const mensajes = await models.Mensaje.findAll({
       where: { clienteId: clientNum },
-      order: [ ['date', 'ASC'] ]
+      order: [['date', 'ASC']]
     });
     res.status(200).json(mensajes);
   } catch (e) {

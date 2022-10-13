@@ -15,8 +15,6 @@ async function GETMessages(client) {
         let messages = await chat.fetchMessages({ limit: 1000 });
         for (let j in messages) {
 
-
-
             var clienteNumberN = '';
             let body = await messages[j].body;
             let to = await messages[j].to;

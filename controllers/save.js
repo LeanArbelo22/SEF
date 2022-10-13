@@ -27,8 +27,7 @@ const addChat = async (chat, sellerNum) => {
           console.log('Estado de Whatsapp');
           return;
       }
-      
-      // ?? Cliente, created 
+
       let [Cliente, created] = await models.Cliente.findOrCreate({
         where: { id: clientID  },
         defaults: {

@@ -156,15 +156,15 @@ const generateSession = (seller, sellerName) => {
                 clienteId: clientID
             });
 
-            // saveMedia GUARDA fotos, stickers y videos en base64, AUDIOS NO
+            // saveMedia GUARDA en una carpeta fotos, stickers y videos en base64, AUDIOS NO
             if (msg.hasMedia) {
                 const mediaMsg = await msg.downloadMedia();
                 console.log("--------------------- FULL MESSAGE ---------------------")
                 console.log(msg);
-                console.log("--------------------- MEDIA MESSAGE DOWNLOADED ---------------------");
+                console.log("--------------------- MEDIA DOWNLOADED ---------------------");
                 console.log(mediaMsg);
 
-                /* let message = await models.Mensaje.create({   // ? let message 
+                /* let message = await models.Mensaje.create({
                     body: body,
                     to: to,
                     from: from,
@@ -173,7 +173,12 @@ const generateSession = (seller, sellerName) => {
                     id: messageID,
                     clienteId: clientID,
                     media: mediaMsg.data,
-                    type: msg.type
+                    type: msg.type,
+
+                    // !!
+                    typeExtension: msg.mimetype.split('/')[1];
+                    // !!
+                    hasMedia: msg.hasMedia ?
                 }); */
 
                 // saveMedia(mediaMsg);
@@ -188,8 +193,10 @@ const generateSession = (seller, sellerName) => {
     });
 }
 
-/* const getSellersNames = async () => {
+/* 
+const getSellersNames = async () => {
     const sellersList = await models.Vendedor.findAll({});
     const sellers = sellersList.map(seller => seller.dataValues.name);
     return sellers
-} */
+} 
+*/

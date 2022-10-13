@@ -3,9 +3,6 @@ const{CLIENTE_TABLE, ClienteSchema} = require('./../models/cliente.model');
 const{VENDEDOR_TABLE, VendedorSchema} = require('./../models/vendedor.model');
 const{MENSAJE_TABLE, MensajeSchema} = require('./../models/mensaje.model');
 
-
-
-
 module.exports = {
   async up (queryInterface) {
     await queryInterface.createTable(VENDEDOR_TABLE, VendedorSchema);

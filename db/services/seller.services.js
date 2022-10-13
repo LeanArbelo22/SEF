@@ -1,7 +1,4 @@
-const { now } = require('moment');
 const { models } = require('./../../libs/sequelize');
-
-
 
 async function createSeller(client, myCustomId) {
   let clientInfo = await client.info;
@@ -24,12 +21,4 @@ async function createSeller(client, myCustomId) {
   return;
 }
 
-
-
-
-
-async function updateSeller(client, myCustomId) {
-
-
-}
 module.exports = { createSeller }

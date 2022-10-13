@@ -1,4 +1,4 @@
-const {get, reply} = require('../adapter')
+const {get, reply} = require('../adapter') // !! ??
 const {saveExternalFile, checkIsUrl} = require('./handle')
 
 const getMessages = async (message) => {
