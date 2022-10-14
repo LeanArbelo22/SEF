@@ -115,8 +115,6 @@ const generateSession = (seller, sellerName) => {
         io.emit("sellerDisconnected", sellerName);
     });
 
-    seller.on('message', (msg) => io.emit("newMessage", msg));
-
     seller.on('message_create', async (msg) => {
         try {
             let sellerInfo = seller.info;
@@ -175,8 +173,6 @@ const generateSession = (seller, sellerName) => {
                     fromMe: fromSeller,
                     id: messageID,
                     clienteId: clientID,
-                    
-                    // !!
                     media: mediaMsg.data,
                     type: msg.type,
 
@@ -188,8 +184,11 @@ const generateSession = (seller, sellerName) => {
                 */
 
                 // saveMedia(mediaMsg);
-                //io.emit("media", mediaMsg);
+                // io.emit("media", mediaMsg);
             }
+
+            io.emit("newMessage", msg)
+
         } catch (e) {
             console.log(e)
         }
