@@ -146,25 +146,18 @@ const generateSession = (seller, sellerName) => {
             let clientID = whatsappNumber + '_' + sellerNum; // ?
             let messageID = whatsappMsgID + ' by ' + clientID; // ?
 
-            let message = await models.Mensaje.create({   // ? let message 
-                body: body,
-                to: to,
-                from: from,
-                date: date,
-                fromMe: fromSeller,
-                id: messageID,
-                clienteId: clientID
-            });
-
+           
             // saveMedia GUARDA en una carpeta fotos, stickers y videos en base64, AUDIOS NO
             if (msg.hasMedia) {
                 const mediaMsg = await msg.downloadMedia();
-                console.log("--------------------- FULL MESSAGE ---------------------");
-                console.log(msg);
-                console.log("--------------------- MEDIA DOWNLOADED ---------------------");
-                console.log(mediaMsg);
+                // console.log("--------------------- FULL MESSAGE ---------------------");
+                // console.log(msg);
+                // console.log("--------------------- MEDIA DOWNLOADED ---------------------");
+                // console.log(mediaMsg);
+                
+                let ext = msg._data.mimetype.split('/')[1];
+                
 
-                /* 
                 let message = await models.Mensaje.create({
                     body: body,
                     to: to,
@@ -176,15 +169,28 @@ const generateSession = (seller, sellerName) => {
                     media: mediaMsg.data,
                     type: msg.type,
 
-                    // !!
-                    typeExtension: msg.mimetype.split('/')[1];
-                    // !!
-                    hasMedia: msg.hasMedia ?
-                }); 
-                */
+                    // !!}
 
-                // saveMedia(mediaMsg);
-                // io.emit("media", mediaMsg);
+                    typeExtension: ext,
+                    // !!
+                    hasMedia: msg.hasMedia 
+                }); 
+                
+
+                
+            }
+            else{ 
+              let message = await models.Mensaje.create({   // ? let message 
+              body: body,
+              to: to,
+              from: from,
+              date: date,
+              fromMe: fromSeller,
+              id: messageID,
+              clienteId: clientID
+          });
+
+
             }
 
             io.emit("newMessage", msg)
@@ -202,3 +208,11 @@ const getSellersNames = async () => {
     return sellers
 }
 */
+
+const session1 = newSession('mati');
+generateSession(session1,'mati');
+
+
+
+// const session2 = newSession('mati');
+// generateSession(session2, 'leandro');

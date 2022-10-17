@@ -31,8 +31,18 @@ const MensajeSchema = {
         // como queremos nombralo en la base de datos
         field: 'from'
     },
-
-
+    media: { // data proveniente del mensaje multimedia descargado (codigo en base64)
+        allowNull: true,
+        type: DataTypes.BLOB,
+    },
+    type: { // tipo de mensaje: chat, audio, video, imagen
+        allowNull: true,
+        type: DataTypes.STRING
+    },
+    typeExtension: { // extension del mensaje multimedia descargado (jpg, webp, ogg, mp4, etc)
+        allowNull: true,
+        type: DataTypes.STRING
+    },
     date: {
         allowNull: true,
         type: DataTypes.DATE,
