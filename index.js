@@ -173,7 +173,7 @@ const generateSession = (seller, sellerName) => {
 
                     typeExtension: ext,
                     // !!
-                    hasMedia: msg.hasMedia 
+                    //hasMedia: msg.hasMedia 
                 }); 
                 
 
@@ -208,4 +208,7 @@ const getSellersNames = async () => {
     return sellers
 }
 */
+
+//const session1 = newSession('mati');
+//generateSession(session1,'mati');
 
