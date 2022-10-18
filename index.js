@@ -209,10 +209,3 @@ const getSellersNames = async () => {
 }
 */
 
-const session1 = newSession('mati');
-generateSession(session1,'mati');
-
-
-
-// const session2 = newSession('mati');
-// generateSession(session2, 'leandro');

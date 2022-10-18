@@ -33,7 +33,7 @@ const MensajeSchema = {
     },
     media: { // data proveniente del mensaje multimedia descargado (codigo en base64)
         allowNull: true,
-        type: DataTypes.BLOB,
+        type: DataTypes.TEXT('long'),
     },
     type: { // tipo de mensaje: chat, audio, video, imagen
         allowNull: true,
