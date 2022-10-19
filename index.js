@@ -205,7 +205,6 @@ const replyMessages = (client) => {
 
         const message = body.toLowerCase();
 
-        message === 'hola' && await msg.reply('Hola, como estas?');
-        message === 'todo bien, vos?' && await msg.sendMessage(from, 'bien...');
+        message === 'hola' ? await msg.reply('Hola, como estas?') : message === 'todo bien, vos?' && await msg.sendMessage(from, 'bien...');
     })
 }
