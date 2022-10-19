@@ -44,7 +44,7 @@ const newSession = (sellerName) => {
     const worker = `${__dirname}/sessions/session-${sellerName}/Default/Service Worker`;
 
     if (fs.existsSync(worker)) {
-        fs.rmdirSync(worker, { recursive: true });
+        fs.rmSync(worker, { recursive: true });
         console.log('Carpeta eliminada');
     }
 
@@ -200,15 +200,11 @@ const getSellersNames = async () => {
 //generateSession(session1,'mati');
 
 const replyMessages = (client) => {
-    client.on('message_create', async (msg) => {
+    client.on('message', async (msg) => {
         const { from, body, fromMe } = msg;
 
         const message = body.toLowerCase();
 
-        if(!fromMe) {
-            message === 'hola' && await msg.reply('Hola, como estas?') ||
-            message === 'todo bien, vos?' && await msg.sendMessage(from, 'bien...') ||
-            message === 'ok' && await msg.sendMessage(from, '👌')
-        }
+        message === 'ok' && await msg.reply('👌');
     })
 }
