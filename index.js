@@ -201,10 +201,14 @@ const getSellersNames = async () => {
 
 const replyMessages = (client) => {
     client.on('message_create', async (msg) => {
-        const { from, body } = msg;
+        const { from, body, fromMe } = msg;
 
         const message = body.toLowerCase();
 
-        message === 'hola' ? await msg.reply('Hola, como estas?') : message === 'todo bien, vos?' && await msg.sendMessage(from, 'bien...');
+        if(!fromMe) {
+            message === 'hola' && await msg.reply('Hola, como estas?') ||
+            message === 'todo bien, vos?' && await msg.sendMessage(from, 'bien...') ||
+            message === 'ok' && await msg.sendMessage(from, '👌')
+        }
     })
 }
