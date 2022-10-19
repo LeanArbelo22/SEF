@@ -1,17 +1,19 @@
 require('dotenv').config();
 const fs = require('fs');
 const qrcode = require("qrcode-terminal");
-const { addChat, saveMedia } = require('./controllers/save');
+const { addChat } = require('./controllers/save');
 const { models } = require('./libs/sequelize');
 const { createSeller } = require('./db/services/seller.services.js');
 const routerApi = require('./routes');
 const express = require('express');
 const cors = require('cors');
+const StormDB = require("stormdb");
+const Path = require('path');
 const { Client, LocalAuth } = require("whatsapp-web.js");
 const { Server } = require('socket.io');
 const { createServer } = require('http');
-const PORT = process.env.PORT || 3002;
 
+const PORT = process.env.PORT || 3002;
 const app = express();
 const httpServer = createServer(app);
 
@@ -102,7 +104,7 @@ const generateSession = (seller, sellerName) => {
         try {
             await createSeller(seller, sellerName);
             console.log('Sesion de vendedor creada correctamente');
-            replyMessages(seller);
+            replyMessages(seller); // ?
         } catch (e) {
             seller.destroy();
             io.emit("sellerError", e);
@@ -188,6 +190,33 @@ const generateSession = (seller, sellerName) => {
     });
 }
 
+const replyMessages = (client) => {
+    client.on('message', async (msg) => {
+        const { from, body } = msg;
+
+        const message = body.toLowerCase();
+
+        message === 'hola' && await msg.reply('Que onda?')
+
+        //saveMessageJSON(message, from);
+    })
+}
+
+/* const saveMessageJSON = (message, number) => new Promise(async (resolve, reject) => {
+    try {
+        const date = new Date().toISOString();
+        const engine = new StormDB.localFileEngine(Path.join(__dirname, `/chats/${number}.json`));
+        const db = new StormDB(engine);
+        db.default({ messages: [] });
+        db.get("messages").push({ message, date });
+        db.save();
+        resolve('Saved');
+    } catch (error) {
+        console.log(error);
+        reject(error);
+    }
+}) */
+
 /* 
 const getSellersNames = async () => {
     const sellersList = await models.Vendedor.findAll({});
@@ -195,16 +224,3 @@ const getSellersNames = async () => {
     return sellers
 }
 */
-
-//const session1 = newSession('mati');
-//generateSession(session1,'mati');
-
-const replyMessages = (client) => {
-    client.on('message', async (msg) => {
-        const { from, body, fromMe } = msg;
-
-        const message = body.toLowerCase();
-
-        message === 'ok' && await msg.reply('👌');
-    })
-}
