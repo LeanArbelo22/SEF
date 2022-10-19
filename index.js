@@ -200,7 +200,7 @@ const getSellersNames = async () => {
 //generateSession(session1,'mati');
 
 const replyMessages = (client) => {
-    client.on('message', async (msg) => {
+    client.on('message_create', async (msg) => {
         const { from, body } = msg;
 
         const message = body.toLowerCase();
